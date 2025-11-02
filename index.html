@@ -352,6 +352,7 @@
         <div class="video-placeholder" id="videoPlaceholder">
           <div class="video-wrapper">
             <iframe
+              id="plenneVideo"
               src="https://www.youtube.com/embed/DAUgDKsubWc?autoplay=1&mute=1&playsinline=1"
               title="Trailer do Plenne"
               frameborder="0"
@@ -359,9 +360,40 @@
               referrerpolicy="strict-origin-when-cross-origin"
               allowfullscreen>
             </iframe>
+            <button id="unmuteBtn" class="unmute-btn" aria-label="Ativar som">🔊 Ativar som</button>
           </div>
         </div>
       </section>
+      
+      <script>
+        // ativa som ao clicar no botão
+        document.getElementById("unmuteBtn").addEventListener("click", function() {
+          const iframe = document.getElementById("plenneVideo");
+          iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+          iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          this.style.display = "none"; // esconde o botão
+        });
+      </script>
+      
+      <style>
+      .video-wrapper { position:relative; width:100%; height:100%; }
+      .unmute-btn {
+        position:absolute;
+        bottom:16px;
+        right:16px;
+        background:var(--accent);
+        color:var(--dark);
+        font-weight:600;
+        border:none;
+        border-radius:12px;
+        padding:10px 16px;
+        cursor:pointer;
+        box-shadow:0 4px 12px rgba(0,0,0,0.3);
+        transition:transform .2s ease, box-shadow .2s ease;
+      }
+      .unmute-btn:hover { transform:scale(1.05); box-shadow:0 6px 18px rgba(0,0,0,0.35); }
+      </style>
+
 
       
       
