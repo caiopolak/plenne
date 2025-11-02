@@ -1,134 +1,401 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Plenne - Sua Vida Financeira no Controle</title>
+  <link rel="icon" type="image/png" href="8ba11abe-a1cc-4724-9bd0-f9736d45ca65.png">
   <style>
+    :root {
+      --primary: #2ECC71;
+      --secondary: #27AE60;
+      --accent: #FFD700;
+      --glow: #FFD700;
+      --light: #F0FFFA;
+      --dark: #0B1E13;
+      --bg: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    [data-theme="dark"] {
+      --primary: #1B4332;
+      --secondary: #0C2F23;
+      --accent: #FFD700;
+      --glow: #2ECC71;
+      --light: #E8FFE9;
+      --dark: #F0FFFA;
+      --bg: linear-gradient(135deg, #081C15, #1B4332);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background 0.3s, color 0.3s, border 0.3s, box-shadow 0.3s;
+    }
+
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #6AC47E, #3E9C68);
-      color: #fff;
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--light);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      zoom: 0.95;
     }
+
     header {
-      padding: 40px;
       text-align: center;
-      background: rgba(0, 0, 0, 0.2);
+      padding: 50px 20px 30px;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
     }
+
+    header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    header img {
+      width: 85px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
     header h1 {
-      font-size: 3em;
-      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 700;
     }
+
     header p {
-      font-size: 1.2em;
+      max-width: 650px;
+      margin: 10px auto 0;
+      font-size: 1rem;
       opacity: 0.9;
     }
-    section {
-      padding: 60px 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .feature {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 30px;
-      margin-bottom: 30px;
+
+    .theme-toggle {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: var(--accent);
+      color: var(--dark);
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
       transition: 0.3s;
     }
+
+    .theme-toggle:hover {
+      transform: scale(1.08);
+    }
+
+    .video-section {
+      text-align: center;
+      margin: 35px auto;
+      padding: 0 20px;
+      max-width: 850px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .video-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .video-section h2 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .video-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.7);
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+    }
+
+    section {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 20px;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+      cursor: pointer;
+    }
+
+    .feature.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .feature:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-4px);
     }
-    h2 {
-      color: #F0FFFA;
+
+    .feature h2 {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
     }
+
+    .feature p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
     button.floating {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: #FFD700;
-      color: #000;
+      background: var(--accent);
+      color: var(--dark);
       border: none;
-      border-radius: 50px;
-      padding: 15px 25px;
-      font-size: 1em;
+      border-radius: 40px;
+      padding: 14px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      animation: float 2s ease-in-out infinite;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      transition: 0.3s;
+      animation: float 2.5s ease-in-out infinite;
+      z-index: 10;
     }
+
+    button.floating:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    }
+
     @keyframes float {
-      0% {transform: translateY(0);}
-      50% {transform: translateY(-10px);}
-      100% {transform: translateY(0);}
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0); }
     }
+
     footer {
       text-align: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.2);
-      font-size: 0.9em;
+      padding: 25px 10px;
+      background: rgba(0, 0, 0, 0.3);
+      font-size: 0.85em;
+      backdrop-filter: blur(8px);
+      margin-top: auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
     }
+
+    footer.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .social-footer {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 10px;
+    }
+
+    .social-footer a {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: 0.4s ease;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    .social-footer img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .social-footer a:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 12px var(--glow), 0 0 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .social-footer a:hover img {
+      transform: scale(1.12);
+    }
+
+    /* Estilos para o Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background-color: var(--primary);
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 16px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      color: var(--light);
+    }
+
+    .close {
+      color: var(--light);
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    #modal-description {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
     @media (max-width: 600px) {
-      header h1 { font-size: 2em; }
-      section { padding: 30px 10px; }
+      body { zoom: 1; }
+      header h1 { font-size: 1.8rem; }
+      header p { font-size: 0.95rem; }
+      .feature h2 { font-size: 1.1rem; }
+      .feature p { font-size: 0.9rem; }
+      .social-footer a { width: 48px; height: 48px; }
+      .social-footer img { width: 26px; height: 26px; }
+      .modal-content { width: 95%; padding: 20px; }
     }
   </style>
 </head>
+
 <body>
 
 <header>
+  <img src="https://plenneapp.lovable.app/lovable-uploads/8ba11abe-a1cc-4724-9bd0-f9736d45ca65.png" alt="Logo Plenne">
   <h1>Bem-vindo ao Plenne</h1>
   <p>Seu gerenciador financeiro para conquistar metas, sonhos e ter controle total sobre sua vida financeira.</p>
+  <button class="theme-toggle" id="themeToggle" title="Alternar tema">☾</button>
 </header>
 
+<div class="video-section">
+  <h2>🎥 Trailer do Plenne</h2>
+  <div class="video-placeholder">
+    <p>Espaço reservado para o vídeo (embed do YouTube futuramente)</p>
+  </div>
+</div>
+
 <section>
-  <div class="feature">
-    <h2>🔐 Autenticação Segura</h2>
-    <p>Login, cadastro e perfis personalizados para cada usuário. Segurança garantida com Supabase Auth.</p>
-  </div>
-
-  <div class="feature">
-    <h2>👥 Workspaces Inteligentes</h2>
-    <p>Crie múltiplos workspaces, gerencie membros e personalize seu espaço de trabalho financeiro.</p>
-  </div>
-
-  <div class="feature">
-    <h2>💸 Gestão de Transações</h2>
-    <p>Cadastre receitas, despesas, personalize categorias e acompanhe todas as suas movimentações com filtros avançados.</p>
-  </div>
-
-  <div class="feature">
-    <h2>🎯 Metas Financeiras</h2>
-    <p>Defina objetivos financeiros, acompanhe aportes e veja seu progresso em tempo real.</p>
-  </div>
-
-  <div class="feature">
-    <h2>📈 Investimentos</h2>
-    <p>Registre investimentos, visualize rendimento esperado e acompanhe sua carteira de forma simplificada.</p>
-  </div>
-
-  <div class="feature">
-    <h2>📝 Orçamentos Mensais</h2>
-    <p>Planeje, controle e receba alertas quando estiver perto de atingir seu orçamento mensal.</p>
-  </div>
-
-  <div class="feature">
-    <h2>📊 Dashboard & Analytics</h2>
-    <p>Gráficos, cards e indicadores para você ter uma visão clara da sua vida financeira.</p>
-  </div>
-
-  <div class="feature">
-    <h2>📚 Educação Financeira</h2>
-    <p>Conteúdo educativo, desafios, dicas práticas e módulos de aprendizado para você dominar sua vida financeira.</p>
-  </div>
+  <div class="feature" onclick="openModal('🔐 Autenticação Segura', 'O Plenne utiliza o Supabase Auth para garantir a máxima segurança no login e cadastro. Isso inclui criptografia de dados, autenticação de dois fatores opcional e proteção contra ataques comuns. Perfis são personalizados, permitindo que você defina avatars, preferências de notificação e integrações com outros serviços.<br><br><strong>Como funciona:</strong> Ao cadastrar, seus dados são armazenados de forma segura no banco de dados. O login verifica credenciais em tempo real sem expor senhas.<br><br><strong>Como usar:</strong> 1. Acesse a tela de login/cadastro. 2. Insira email e senha ou use provedores como Google/Apple. 3. Após login, vá para “Configurações > Perfil” para personalizar. Lembre-se de ativar a autenticação de dois fatores para maior segurança.')"><h2>🔐 Autenticação Segura</h2><p>Login, cadastro e perfis personalizados com segurança garantida via Supabase Auth.</p></div>
+  <div class="feature" onclick="openModal('👥 Workspaces Inteligentes', 'Workspaces no Plenne permitem separar diferentes contextos financeiros, como pessoal, familiar ou empresarial. Cada workspace pode ter membros com roles específicas (admin, editor, visualizador), facilitando a colaboração.<br><br><strong>Como funciona:</strong> Os dados são isolados por workspace, garantindo privacidade. Membros recebem convites por email e podem aceitar para acessar.<br><br><strong>Como usar:</strong> 1. No dashboard principal, clique em “Criar Novo Workspace”. 2. Defina nome, descrição e adicione membros via email. 3. Gerencie permissões em “Configurações do Workspace > Membros”. Alterne entre workspaces no menu superior para navegar facilmente.')"><h2>👥 Workspaces Inteligentes</h2><p>Crie múltiplos workspaces, gerencie membros e personalize seu espaço financeiro.</p></div>
+  <div class="feature" onclick="openModal('💸 Gestão de Transações', 'Gerencie todas as suas transações de forma intuitiva, incluindo receitas (salários, investimentos) e despesas (contas, compras). Personalize categorias como “Alimentação”, “Transporte” ou crie novas. Filtros avançados permitem buscas por data, valor, categoria ou tags.<br><br><strong>Como funciona:</strong> Cada transação é registrada em tempo real e afeta o balanço geral. Relatórios automáticos mostram padrões de gastos.<br><br><strong>Como usar:</strong> 1. Vá para “Transações > Nova Transação”. 2. Escolha tipo (receita/despesa), valor, data, categoria e descrição. 3. Use filtros na lista para visualizar resumos. Exporte dados para CSV se precisar de análises externas.')"><h2>💸 Gestão de Transações</h2><p>Cadastre receitas, despesas, personalize categorias e use filtros avançados.</p></div>
+  <div class="feature" onclick="openModal('🎯 Metas Financeiras', 'Defina metas como “Comprar um carro” ou “Viagem de férias”, com valores alvo e prazos. Acompanhe aportes mensais e veja o progresso em barras de progresso e gráficos.<br><br><strong>Como funciona:</strong> O sistema calcula automaticamente o quanto falta e sugere aportes baseados no seu histórico de receitas.<br><br><strong>Como usar:</strong> 1. Em “Metas > Nova Meta”, insira nome, valor total, data final e aporte inicial. 2. Adicione aportes em “Aportes > Novo”. 3. Monitore no dashboard principal, onde alertas aparecem se você estiver atrasado.')"><h2>🎯 Metas Financeiras</h2><p>Defina objetivos, acompanhe aportes e veja seu progresso em tempo real.</p></div>
+  <div class="feature" onclick="openModal('📈 Investimentos', 'Gerencie sua carteira de investimentos, incluindo ações, fundos, cripto e mais. Visualize rendimentos esperados com base em taxas históricas e projeções.<br><br><strong>Como funciona:</strong> Integrações com APIs de mercado (opcional) atualizam valores em tempo real. Gráficos mostram diversificação e performance.<br><br><strong>Como usar:</strong> 1. Vá para “Investimentos > Adicionar Ativo”. 2. Insira tipo, quantidade, preço de compra e data. 3. Acompanhe rendimentos no painel dedicado. Use ferramentas de simulação para prever cenários futuros.')"><h2>📈 Investimentos</h2><p>Gerencie sua carteira e visualize rendimentos esperados com clareza.</p></div>
+  <div class="feature" onclick="openModal('📝 Orçamentos Mensais', 'Planeje orçamentos por categoria, definindo limites mensais. Receba alertas via notificação quando se aproximar de 80% ou ultrapassar o limite.<br><br><strong>Como funciona:</strong> O sistema soma despesas automaticamente e compara com o orçamento definido, gerando relatórios mensais.<br><br><strong>Como usar:</strong> 1. Em “Orçamentos > Novo Mês”, selecione o mês e defina limites por categoria. 2. As transações são vinculadas automaticamente. 3. Verifique alertas no app e ajuste orçamentos conforme necessário para o próximo mês.')"><h2>📝 Orçamentos Mensais</h2><p>Planeje, controle e receba alertas ao se aproximar do limite mensal.</p></div>
+  <div class="feature" onclick="openModal('📊 Dashboard & Analytics', 'O dashboard oferece uma visão geral com indicadores como saldo atual, fluxo de caixa e tendências de gastos. Gráficos interativos (pizza, linha) ajudam a entender padrões.<br><br><strong>Como funciona:</strong> Dados são agregados de todas as seções, com análises preditivas baseadas em IA simples para prever saldos futuros.<br><br><strong>Como usar:</strong> 1. Acesse o dashboard principal ao logar. 2. Clique em gráficos para zoom ou filtros. 3. Exporte relatórios para PDF ou compartilhe com membros do workspace.')"><h2>📊 Dashboard & Analytics</h2><p>Indicadores e gráficos claros pra entender sua saúde financeira.</p></div>
+  <div class="feature" onclick="openModal('📚 Educação Financeira', 'Acesse dicas diárias, desafios semanais (ex: “Economize 10% esta semana”) e cursos curtos sobre temas como investimentos básicos ou controle de dívidas.<br><br><strong>Como funciona:</strong> Conteúdo é curado e atualizado regularmente, com progresso rastreável e recompensas por completude.<br><br><strong>Como usar:</strong> 1. Vá para “Educação > Explorar”. 2. Escolha um módulo ou desafio. 3. Complete tarefas e veja seu nível de conhecimento aumentar. Integre lições diretamente às suas metas financeiras.')"><h2>📚 Educação Financeira</h2><p>Dicas, desafios e aprendizado contínuo pra dominar suas finanças.</p></div>
 </section>
 
 <button class="floating" onclick="window.location.href='https://plenneapp.lovable.app/'">Testar Agora</button>
 
 <footer>
-  &copy; 2025 Plenne - Todos os direitos reservados.
+  <div class="social-footer">
+    <a href="https://youtube.com/@plenneapp" target="_blank">
+      <img src="https://icons.iconarchive.com/icons/dakirby309/simply-styled/256/YouTube-icon.png" alt="YouTube">
+    </a>
+    <a href="https://instagram.com/plenneapp" target="_blank">
+      <img src="https://pngimg.com/uploads/instagram/instagram_PNG12.png" alt="Instagram">
+    </a>
+  </div>
+  &copy; 2025 Plenne — Todos os direitos reservados.
 </footer>
+
+<!-- Estrutura do Modal -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="modal-title"></h2>
+    <p id="modal-description"></p>
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const isDark = document.body.dataset.theme === 'dark';
+    document.body.dataset.theme = isDark ? '' : 'dark';
+    toggle.textContent = isDark ? '☾' : '☀';
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('header, .video-section, .feature, footer').forEach(el => observer.observe(el));
+
+  // Funções para o Modal
+  function openModal(title, description) {
+    document.getElementById('modal-title').innerHTML = title;
+    document.getElementById('modal-description').innerHTML = description;
+    document.getElementById('myModal').style.display = 'block';
+  }
+
+  function closeModal() {
+    document.getElementById('myModal').style.display = 'none';
+  }
+
+  // Fechar modal ao clicar fora do conteúdo
+  window.onclick = function(event) {
+    const modal = document.getElementById('myModal');
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+</script>
 
 </body>
 </html>
